@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>DDLJ Valentine ❤️</title>
+<title>Valentine ❤️</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
@@ -34,7 +34,7 @@ transition:opacity 2s ease;
 opacity:1;
 }
 
-/* Dark overlay for readability */
+/* Dark overlay */
 .overlay{
 position:fixed;
 top:0;
@@ -44,20 +44,6 @@ height:100%;
 background:rgba(0,0,0,0.4);
 z-index:-1;
 pointer-events:none;
-}
-
-/* Moving Train */
-.swiss-train{
-position:fixed;
-bottom:80px;
-width:320px;
-animation:moveTrain 25s linear infinite;
-z-index:2;
-}
-
-@keyframes moveTrain{
-0%{left:-350px;}
-100%{left:110%;}
 }
 
 .container{
@@ -153,8 +139,6 @@ font-weight:bold;
 
 <div class="overlay"></div>
 
-<img src="swiss-train.png" class="swiss-train">
-
 <div id="countdown"></div>
 
 <div class="container" id="content">
@@ -163,9 +147,10 @@ font-weight:bold;
 <button onclick="checkPass()">Enter</button>
 </div>
 
-<audio id="trainHorn"><source src="train.mp3"></audio>
-<audio id="windSound" loop><source src="wind.mp3"></audio>
-<audio id="music" loop><source src="rozana.mp3"></audio>
+<!-- Only Background Music -->
+<audio id="music" loop>
+<source src="love.mp3">
+</audio>
 
 <script>
 
@@ -191,19 +176,17 @@ const questions = [
 function checkPass(){
 if(document.getElementById("pass").value === "srkforever"){
 
-// Cinematic fade
 document.body.style.filter="brightness(0)";
 
 setTimeout(()=>{
 document.body.classList.add("video-active");
 document.body.style.filter="brightness(1)";
-document.getElementById("windSound").play();
 document.getElementById("music").play();
 },800);
 
 setTimeout(()=>{
 next();
-},1800);
+},1600);
 
 }else{
 alert("Wrong password 😏");
@@ -228,7 +211,7 @@ const content = document.getElementById("content");
 content.innerHTML = "";
 
 if(step >= questions.length){
-palat();
+proposal();
 return;
 }
 
@@ -271,8 +254,8 @@ setTimeout(()=>document.body.classList.remove("shake"),400);
 
 document.getElementById("content").innerHTML = `
 <h1 style="font-size:90px;">💔</h1>
-<h2>No? The train is waiting for your Yes 🚂</h2>
-<button onclick="next()">Ask Again ❤️</button>
+<h2>No? I’ll ask you again ❤️</h2>
+<button onclick="next()">Ask Again</button>
 `;
 }
 
@@ -297,13 +280,6 @@ answers.push(qObj.q + " -> " + textarea.value);
 step++;
 next();
 };
-}
-
-function palat(){
-document.getElementById("trainHorn").play();
-document.getElementById("content").innerHTML = `
-<h1 style="color:gold;">Palat...</h1>
-<button onclick="proposal()">Turn ❤️</button>`;
 }
 
 function proposal(){
@@ -359,3 +335,4 @@ document.getElementById("countdown").innerHTML =
 </script>
 </body>
 </html>
+
