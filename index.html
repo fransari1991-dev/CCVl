@@ -17,7 +17,7 @@ text-align:center;
 transition:all 1.5s ease;
 }
 
-/* Video Background */
+/* Background Video */
 #bgVideo{
 position:fixed;
 top:0;
@@ -30,11 +30,12 @@ opacity:0;
 transition:opacity 2s ease;
 }
 
+/* When activated */
 .video-active #bgVideo{
 opacity:1;
 }
 
-/* Dark overlay for readability */
+/* Dark overlay */
 .overlay{
 position:fixed;
 top:0;
@@ -132,8 +133,8 @@ font-weight:bold;
 
 <body>
 
-<!-- Background Video -->
-<video id="bgVideo" autoplay muted loop playsinline>
+<!-- Video Background -->
+<video id="bgVideo" muted loop playsinline>
 <source src="clipfly-ai-20260212211929.mp4" type="video/mp4">
 </video>
 
@@ -176,11 +177,12 @@ const questions = [
 function checkPass(){
 if(document.getElementById("pass").value === "srkforever"){
 
-// Cinematic fade effect
+// Fade out effect
 document.body.style.filter="brightness(0)";
 
 setTimeout(()=>{
 document.body.classList.add("video-active");
+document.getElementById("bgVideo").play();
 document.body.style.filter="brightness(1)";
 document.getElementById("music").play();
 },800);
@@ -255,7 +257,7 @@ setTimeout(()=>document.body.classList.remove("shake"),400);
 
 document.getElementById("content").innerHTML = `
 <h1 style="font-size:90px;">💔</h1>
-<h2>No? I’ll ask you again ❤️</h2>
+<h2>No? I’ll ask again ❤️</h2>
 <button onclick="next()">Ask Again</button>
 `;
 }
