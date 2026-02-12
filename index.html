@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>DDLJ Valentine ❤️</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body{
+margin:0;
+padding:0;
+background:black;
+color:white;
+font-family:Georgia,serif;
+overflow:hidden;
+text-align:center;
+transition:all 1.5s ease;
+}
+
+/* Video Background */
+#bgVideo{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+object-fit:cover;
+z-index:-2;
+opacity:0;
+transition:opacity 2s ease;
+}
+
+.video-active #bgVideo{
+opacity:1;
+}
+
+/* Dark overlay for readability */
+.overlay{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.4);
+z-index:-1;
+pointer-events:none;
+}
+
+/* Moving Train */
+.swiss-train{
+position:fixed;
+bottom:80px;
+width:320px;
+animation:moveTrain 25s linear infinite;
+z-index:2;
+}
+
+@keyframes moveTrain{
+0%{left:-350px;}
+100%{left:110%;}
+}
+
+.container{
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+height:100vh;
+padding:30px;
+position:relative;
+z-index:3;
+}
+
+button{
+padding:10px 20px;
+margin:10px;
+font-size:18px;
+border-radius:30px;
+border:none;
+background:crimson;
+color:white;
+cursor:pointer;
+transition:0.3s;
+}
+
+button:disabled{
+opacity:0.4;
+cursor:not-allowed;
+}
+
+textarea{
+width:80%;
+max-width:600px;
+height:100px;
+border-radius:15px;
+padding:10px;
+margin-top:10px;
+}
+
+img{
+width:260px;
+border-radius:20px;
+margin-top:20px;
+}
+
+.shimmer{
+animation:goldShimmer 2s infinite alternate;
+}
+@keyframes goldShimmer{
+0%{box-shadow:0 0 10px gold;}
+100%{box-shadow:0 0 40px gold;}
+}
+
+.fall{
+position:absolute;
+top:-50px;
+animation:fall linear infinite;
+font-size:22px;
+pointer-events:none;
+}
+@keyframes fall{
+to{transform:translateY(110vh);}
+}
+
+.shake{
+animation:shake 0.4s;
+}
+@keyframes shake{
+0%{transform:translateX(0);}
+25%{transform:translateX(-10px);}
+50%{transform:translateX(10px);}
+75%{transform:translateX(-10px);}
+100%{transform:translateX(0);}
+}
+
+#countdown{
+position:absolute;
+top:20px;
+right:20px;
+color:gold;
+z-index:4;
+font-weight:bold;
+}
+</style>
+</head>
+
+<body>
+
+<!-- Background Video -->
+<video id="bgVideo" autoplay muted loop playsinline>
+<source src="clipfly-ai-20260212211929.mp4" type="video/mp4">
+</video>
+
+<div class="overlay"></div>
+
+<img src="swiss-train.png" class="swiss-train">
+
+<div id="countdown"></div>
+
+<div class="container" id="content">
+<h1 style="color:gold;">Hey Cheesecake ❤️</h1>
+<input type="password" id="pass" placeholder="Enter our secret password">
+<button onclick="checkPass()">Enter</button>
+</div>
+
+<audio id="trainHorn"><source src="train.mp3"></audio>
+<audio id="windSound" loop><source src="wind.mp3"></audio>
+<audio id="music" loop><source src="rozana.mp3"></audio>
+
+<script>
+
+let step = 0;
+let answers = [];
+
+const wifePhoto = "wife.jpg";
+const longMessage = `PASTE YOUR LONG MESSAGE HERE`;
+
+const questions = [
+{q:"Do you remember the first time I saw you and lost my heart?", yesNo:true},
+{q:"Do you remember the date I saw you the first time?", yesNo:true, text:true},
+{q:"When was the first time we kissed and hugged?", text:true},
+{q:"Our first long drive date", text:true},
+{q:"Our first date in Delhi and your feelings?", text:true},
+{q:"Do you remember our first cab ride, sunset, movie and music?", yesNo:true, text:true},
+{q:"My first gift to you", text:true},
+{q:"My best gift to you so far", text:true},
+{q:"Our favourite memory", text:true},
+{q:"Write our best Valentine memory ❤️", text:true}
+];
+
+function checkPass(){
+if(document.getElementById("pass").value === "srkforever"){
+
+// Cinematic fade
+document.body.style.filter="brightness(0)";
+
+setTimeout(()=>{
+document.body.classList.add("video-active");
+document.body.style.filter="brightness(1)";
+document.getElementById("windSound").play();
+document.getElementById("music").play();
+},800);
+
+setTimeout(()=>{
+next();
+},1800);
+
+}else{
+alert("Wrong password 😏");
+}
+}
+
+function typeWriter(text, el, speed = 30){
+let i = 0;
+el.innerHTML = "";
+function typing(){
+if(i < text.length){
+el.innerHTML += text.charAt(i);
+i++;
+setTimeout(typing, speed);
+}
+}
+typing();
+}
+
+function next(){
+const content = document.getElementById("content");
+content.innerHTML = "";
+
+if(step >= questions.length){
+palat();
+return;
+}
+
+let qObj = questions[step];
+
+let qEl = document.createElement("h1");
+qEl.style.color = "red";
+content.appendChild(qEl);
+typeWriter("Cheesecake, " + qObj.q, qEl);
+
+if(qObj.yesNo){
+let yesBtn = document.createElement("button");
+yesBtn.innerHTML = "Yes ❤️";
+yesBtn.onclick = () => handleYes(qObj);
+content.appendChild(yesBtn);
+
+let noBtn = document.createElement("button");
+noBtn.innerHTML = "No 💔";
+noBtn.onclick = handleNo;
+content.appendChild(noBtn);
+}
+else{
+showTextarea(qObj);
+}
+}
+
+function handleYes(qObj){
+if(qObj.text){
+showTextarea(qObj);
+}else{
+answers.push(qObj.q + " -> Yes");
+step++;
+next();
+}
+}
+
+function handleNo(){
+document.body.classList.add("shake");
+setTimeout(()=>document.body.classList.remove("shake"),400);
+
+document.getElementById("content").innerHTML = `
+<h1 style="font-size:90px;">💔</h1>
+<h2>No? The train is waiting for your Yes 🚂</h2>
+<button onclick="next()">Ask Again ❤️</button>
+`;
+}
+
+function showTextarea(qObj){
+const content = document.getElementById("content");
+
+let textarea = document.createElement("textarea");
+textarea.placeholder = "Write your answer...";
+content.appendChild(textarea);
+
+let nextBtn = document.createElement("button");
+nextBtn.innerHTML = "Next ❤️";
+nextBtn.disabled = true;
+content.appendChild(nextBtn);
+
+textarea.addEventListener("input", function(){
+nextBtn.disabled = this.value.trim().length === 0;
+});
+
+nextBtn.onclick = function(){
+answers.push(qObj.q + " -> " + textarea.value);
+step++;
+next();
+};
+}
+
+function palat(){
+document.getElementById("trainHorn").play();
+document.getElementById("content").innerHTML = `
+<h1 style="color:gold;">Palat...</h1>
+<button onclick="proposal()">Turn ❤️</button>`;
+}
+
+function proposal(){
+document.getElementById("content").innerHTML = `
+<h1 style="color:red;">Will you be my Valentine forever?</h1>
+<button onclick="yesFinal()">Yes ❤️</button>
+<button onclick="noFinal()">No 💔</button>`;
+}
+
+function yesFinal(){
+document.getElementById("content").innerHTML = `
+<h1 id="msg"></h1>
+<img src="${wifePhoto}" class="shimmer">`;
+typeWriter(longMessage, document.getElementById("msg"), 20);
+}
+
+function noFinal(){
+document.body.classList.add("shake");
+document.getElementById("content").innerHTML = `
+<h1 style="font-size:90px;">💔</h1>
+<button onclick="proposal()">Okay Fine... Yes ❤️</button>`;
+}
+
+/* Falling Effects */
+function createFall(icon){
+const el = document.createElement("div");
+el.className = "fall";
+el.innerHTML = icon;
+el.style.left = Math.random()*100 + "vw";
+el.style.animationDuration = (Math.random()*5+5) + "s";
+document.body.appendChild(el);
+setTimeout(()=>el.remove(),10000);
+}
+
+setInterval(()=>createFall("❄️"),400);
+setInterval(()=>createFall("❤️"),700);
+setInterval(()=>createFall("🌹"),900);
+
+/* Smart Countdown */
+setInterval(()=>{
+const now = new Date();
+let year = now.getFullYear();
+let target = new Date("February 14, " + year);
+if(now > target){
+target = new Date("February 14, " + (year+1));
+}
+const diff = target - now;
+const days = Math.floor(diff/(1000*60*60*24));
+document.getElementById("countdown").innerHTML =
+"Countdown: " + days + " days ❤️";
+},1000);
+
+</script>
+</body>
+</html>
