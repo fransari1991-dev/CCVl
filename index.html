@@ -34,7 +34,7 @@ transition:opacity 2s ease;
 opacity:1;
 }
 
-/* Dark overlay */
+/* Dark overlay for readability */
 .overlay{
 position:fixed;
 top:0;
@@ -147,9 +147,9 @@ font-weight:bold;
 <button onclick="checkPass()">Enter</button>
 </div>
 
-<!-- Only Background Music -->
+<!-- Romantic Background Song -->
 <audio id="music" loop>
-<source src="love.mp3">
+<source src="love.mp3" type="audio/mpeg">
 </audio>
 
 <script>
@@ -176,6 +176,7 @@ const questions = [
 function checkPass(){
 if(document.getElementById("pass").value === "srkforever"){
 
+// Cinematic fade effect
 document.body.style.filter="brightness(0)";
 
 setTimeout(()=>{
@@ -335,4 +336,3 @@ document.getElementById("countdown").innerHTML =
 </script>
 </body>
 </html>
-
