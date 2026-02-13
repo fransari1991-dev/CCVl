@@ -175,12 +175,16 @@ const longMessage = `PASTE YOUR LONG MESSAGE HERE`;
 
 const questions = [
 {q:"Do you remember the first time I saw you and lost my heart?", yesNo:true},
-{q:"Do you remember the date I saw you the first time?", yesNo:true, text:true},
-{q:"When was the first time we kissed and hugged?", text:true},
-{q:"Our first long drive date", text:true},
-{q:"Our first date in Delhi and your feelings?", text:true},
+{q:"Do you remember the date, I saw you the first time?", yesNo:true, text:true},
+{q:"When was the first time, we kissed and hugged?", text:true},
+{q:"How did you feel, after we kissed and hugged?", text:true},
+{q:"Do you remember, our first long drive date", text:true},
+{q:"How was our first date in Delhi and your feelings after we made love?", text:true},
+{q:"How was your experience of our first cab ride, the movie, songs and the beautiful sunset?", text:true},
 {q:"My first gift to you", text:true},
 {q:"Our favourite memory", text:true}
+{q:"Our best love moment, and anything else you want to share", text:true}
+{q:"", text:true}
 ];
 
 function checkPass(){
@@ -240,7 +244,7 @@ yesBtn.onclick = () => handleYes(qObj);
 content.appendChild(yesBtn);
 
 let noBtn = document.createElement("button");
-noBtn.innerHTML = "No 💔";
+noBtn.innerHTML = "No 💔, please don't break my heart";
 noBtn.onclick = handleNo;
 content.appendChild(noBtn);
 }
