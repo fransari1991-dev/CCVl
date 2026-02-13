@@ -77,6 +77,11 @@ cursor:pointer;
 transition:0.3s;
 }
 
+button.yes-btn:hover{
+box-shadow:0 0 20px gold, 0 0 40px orange, 0 0 60px yellow;
+transform:scale(1.1);
+}
+
 button:disabled{
 opacity:0.4;
 cursor:not-allowed;
@@ -107,30 +112,6 @@ animation:goldShimmer 2s infinite alternate;
 100%{box-shadow:0 0 40px gold;}
 }
 
-.fall{
-position:absolute;
-top:-50px;
-animation:fall linear infinite;
-font-size:22px;
-pointer-events:none;
-}
-
-@keyframes fall{
-to{transform:translateY(110vh);}
-}
-
-.heart-pop{
-position:absolute;
-font-size:20px;
-animation:pop 1s ease forwards;
-pointer-events:none;
-}
-
-@keyframes pop{
-0%{transform:scale(0); opacity:1;}
-100%{transform:scale(2) translateY(-80px); opacity:0;}
-}
-
 .shake{
 animation:shake 0.4s;
 }
@@ -142,10 +123,22 @@ animation:shake 0.4s;
 75%{transform:translateX(-10px);}
 100%{transform:translateX(0);}
 }
+
+#fireworks{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+pointer-events:none;
+z-index:5;
+}
 </style>
 </head>
 
 <body>
+
+<canvas id="fireworks"></canvas>
 
 <video id="bgVideo" muted loop playsinline>
 <source src="clipfly-ai-20260212211929.mp4" type="video/mp4">
@@ -171,10 +164,10 @@ const longMessage = `PASTE YOUR LONG MESSAGE HERE`;
 
 const questions = [
 {q:"Do you remember the first time I saw you and lost my heart?", yesNo:true},
-{q:"Do you remember the date, I saw you the first time?", yesNo:true, text:true},
-{q:"When was the first time, we kissed and hugged?", text:true},
-{q:"How did you feel, after we kissed and hugged?", text:true},
-{q:"Do you remember, our first long drive date?", text:true},
+{q:"Do you remember the date I saw you the first time?", yesNo:true, text:true},
+{q:"When was the first time we kissed and hugged?", text:true},
+{q:"How did you feel after we kissed and hugged?", text:true},
+{q:"Do you remember our first long drive date?", text:true},
 {q:"How was our first date in Delhi and your feelings after we met?", text:true},
 {q:"How was your experience of our first cab ride, the movie, songs and the beautiful sunset?", text:true},
 {q:"My first gift to you?", text:true},
@@ -184,43 +177,14 @@ const questions = [
 
 function checkPass(){
 const passwordInput = document.getElementById("pass").value.trim();
-
 if(passwordInput === "181915"){
-
-document.body.style.opacity = "0";
-
-setTimeout(() => {
-
 document.body.classList.add("video-active");
-
-const video = document.getElementById("bgVideo");
-const music = document.getElementById("music");
-
-video.play().catch(()=>{});
-music.play().catch(()=>{});
-
-document.body.style.opacity = "1";
-
+document.getElementById("bgVideo").play().catch(()=>{});
+document.getElementById("music").play().catch(()=>{});
 next();
-
-}, 1000);
-
 }else{
 alert("Wrong password 😏");
 }
-}
-
-function typeWriter(text, el, speed = 30){
-let i = 0;
-el.innerHTML = "";
-function typing(){
-if(i < text.length){
-el.innerHTML += text.charAt(i);
-i++;
-setTimeout(typing, speed);
-}
-}
-typing();
 }
 
 function next(){
@@ -237,22 +201,21 @@ let qObj = questions[step];
 let qEl = document.createElement("h1");
 qEl.className = "sparkle";
 qEl.style.color = "pink";
+qEl.innerHTML = "Cheesecake, " + qObj.q;
 content.appendChild(qEl);
-
-typeWriter("Cheesecake, " + qObj.q, qEl);
 
 if(qObj.yesNo){
 let yesBtn = document.createElement("button");
 yesBtn.innerHTML = "Yes ❤️";
-yesBtn.onclick = () => handleYes(qObj);
+yesBtn.className = "yes-btn";
+yesBtn.onclick = ()=>handleYes(qObj);
 content.appendChild(yesBtn);
 
 let noBtn = document.createElement("button");
 noBtn.innerHTML = "No 💔";
 noBtn.onclick = handleNo;
 content.appendChild(noBtn);
-}
-else{
+}else{
 showTextarea();
 }
 }
@@ -270,85 +233,103 @@ function handleNo(){
 document.body.classList.add("shake");
 setTimeout(()=>document.body.classList.remove("shake"),400);
 
-const content = document.getElementById("content");
-
-let oldMsg = document.getElementById("noMessage");
-if(oldMsg) oldMsg.remove();
-
-let msg = document.createElement("div");
-msg.id = "noMessage";
-msg.innerHTML = "Don't break my heart 💔";
-msg.style.color = "red";
-msg.style.fontSize = "24px";
-msg.style.marginTop = "15px";
-msg.style.animation = "softGlow 1s ease-in-out infinite alternate";
-
-content.appendChild(msg);
-
-setTimeout(()=>{
-msg.remove();
-},2000);
+let msg=document.createElement("div");
+msg.innerHTML="Don't break my heart 💔";
+msg.style.color="red";
+msg.style.marginTop="15px";
+msg.style.fontSize="22px";
+document.getElementById("content").appendChild(msg);
+setTimeout(()=>msg.remove(),2000);
 }
 
 function showTextarea(){
-const content = document.getElementById("content");
-
-let textarea = document.createElement("textarea");
-textarea.placeholder = "Write your answer...";
+const content=document.getElementById("content");
+let textarea=document.createElement("textarea");
+textarea.placeholder="Write your answer...";
 content.appendChild(textarea);
 
-let nextBtn = document.createElement("button");
-nextBtn.innerHTML = "Next ❤️";
-nextBtn.disabled = true;
+let nextBtn=document.createElement("button");
+nextBtn.innerHTML="Next ❤️";
+nextBtn.disabled=true;
 content.appendChild(nextBtn);
 
-textarea.addEventListener("input", function(){
-nextBtn.disabled = this.value.trim().length === 0;
-
-let heart = document.createElement("div");
-heart.className = "heart-pop";
-heart.innerHTML = "💖";
-heart.style.left = (window.innerWidth/2) + "px";
-heart.style.top = (window.innerHeight/2) + "px";
-document.body.appendChild(heart);
-setTimeout(()=>heart.remove(),1000);
+textarea.addEventListener("input",function(){
+nextBtn.disabled=this.value.trim().length===0;
 });
 
-nextBtn.onclick = function(){
+nextBtn.onclick=function(){
 step++;
 next();
 };
 }
 
 function proposal(){
-document.getElementById("content").innerHTML = `
+document.getElementById("content").innerHTML=`
 <h1 class="sparkle" style="color:red;">Will you be my Valentine forever?</h1>
-<button onclick="yesFinal()">Yes ❤️</button>
-<button onclick="noFinal()">No 💔</button>`;
+<button class="yes-btn" onclick="yesFinal()">Yes ❤️</button>
+<button onclick="handleNo()">No 💔</button>`;
 }
 
 function yesFinal(){
-document.getElementById("content").innerHTML = `
+startFireworks();
+document.getElementById("content").innerHTML=`
 <h1 id="msg"></h1>
 <img src="${wifePhoto}" class="shimmer">`;
-typeWriter(longMessage, document.getElementById("msg"), 20);
+typeWriter(longMessage,document.getElementById("msg"),20);
 }
 
-function noFinal(){
-handleNo();
+function typeWriter(text,el,speed=30){
+let i=0;
+el.innerHTML="";
+function typing(){
+if(i<text.length){
+el.innerHTML+=text.charAt(i);
+i++;
+setTimeout(typing,speed);
+}
+}
+typing();
 }
 
-function createFall(icon){
-const el = document.createElement("div");
-el.className = "fall";
-el.innerHTML = icon;
-el.style.left = Math.random()*100 + "vw";
-el.style.animationDuration = (Math.random()*5+5) + "s";
-document.body.appendChild(el);
-setTimeout(()=>el.remove(),10000);
+/* Fireworks */
+const canvas=document.getElementById("fireworks");
+const ctx=canvas.getContext("2d");
+canvas.width=window.innerWidth;
+canvas.height=window.innerHeight;
+
+let particles=[];
+
+function startFireworks(){
+setInterval(()=>{
+for(let i=0;i<70;i++){
+particles.push({
+x:Math.random()*canvas.width,
+y:Math.random()*canvas.height/2,
+angle:Math.random()*2*Math.PI,
+speed:Math.random()*4+2,
+radius:Math.random()*2+1,
+life:100
+});
+}
+},600);
+animate();
 }
 
-setInterval(()=>createFall("🌹"),800);
+function animate(){
+requestAnimationFrame(animate);
+ctx.clearRect(0,0,canvas.width,canvas.height);
+
+particles.forEach((p,index)=>{
+p.x+=Math.cos(p.angle)*p.speed;
+p.y+=Math.sin(p.angle)*p.speed;
+p.life--;
+ctx.beginPath();
+ctx.arc(p.x,p.y,p.radius,0,Math.PI*2);
+ctx.fillStyle="hsl("+Math.random()*360+",100%,60%)";
+ctx.fill();
+if(p.life<=0)particles.splice(index,1);
+});
+}
 
 </script>
 </body>
