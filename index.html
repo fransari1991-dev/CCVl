@@ -30,12 +30,10 @@ opacity:0;
 transition:opacity 2s ease;
 }
 
-/* When activated */
 .video-active #bgVideo{
 opacity:1;
 }
 
-/* Dark overlay */
 .overlay{
 position:fixed;
 top:0;
@@ -56,6 +54,16 @@ height:100vh;
 padding:30px;
 position:relative;
 z-index:3;
+}
+
+/* ✨ Soft Sparkle for Questions */
+.sparkle{
+animation: softGlow 2s ease-in-out infinite alternate;
+}
+
+@keyframes softGlow{
+0%{ text-shadow:0 0 5px pink; }
+100%{ text-shadow:0 0 20px gold; }
 }
 
 button{
@@ -82,6 +90,7 @@ height:100px;
 border-radius:15px;
 padding:10px;
 margin-top:10px;
+font-size:16px;
 }
 
 img{
@@ -93,11 +102,13 @@ margin-top:20px;
 .shimmer{
 animation:goldShimmer 2s infinite alternate;
 }
+
 @keyframes goldShimmer{
 0%{box-shadow:0 0 10px gold;}
 100%{box-shadow:0 0 40px gold;}
 }
 
+/* Floating decoration */
 .fall{
 position:absolute;
 top:-50px;
@@ -105,13 +116,28 @@ animation:fall linear infinite;
 font-size:22px;
 pointer-events:none;
 }
+
 @keyframes fall{
 to{transform:translateY(110vh);}
+}
+
+/* 💖 Heart Pop */
+.heart-pop{
+position:absolute;
+font-size:20px;
+animation:pop 1s ease forwards;
+pointer-events:none;
+}
+
+@keyframes pop{
+0%{transform:scale(0); opacity:1;}
+100%{transform:scale(2) translateY(-80px); opacity:0;}
 }
 
 .shake{
 animation:shake 0.4s;
 }
+
 @keyframes shake{
 0%{transform:translateX(0);}
 25%{transform:translateX(-10px);}
@@ -119,28 +145,17 @@ animation:shake 0.4s;
 75%{transform:translateX(-10px);}
 100%{transform:translateX(0);}
 }
-
-#countdown{
-position:absolute;
-top:20px;
-right:20px;
-color:gold;
-z-index:4;
-font-weight:bold;
-}
 </style>
 </head>
 
 <body>
 
-<!-- Video Background -->
+<!-- Background Video -->
 <video id="bgVideo" muted loop playsinline>
 <source src="clipfly-ai-20260212211929.mp4" type="video/mp4">
 </video>
 
 <div class="overlay"></div>
-
-<div id="countdown"></div>
 
 <div class="container" id="content">
 <h1 style="color:gold;">Hey Cheesecake ❤️</h1>
@@ -148,7 +163,6 @@ font-weight:bold;
 <button onclick="checkPass()">Enter</button>
 </div>
 
-<!-- Romantic Background Song -->
 <audio id="music" loop>
 <source src="love.mp3" type="audio/mpeg">
 </audio>
@@ -156,8 +170,6 @@ font-weight:bold;
 <script>
 
 let step = 0;
-let answers = [];
-
 const wifePhoto = "wife.jpg";
 const longMessage = `PASTE YOUR LONG MESSAGE HERE`;
 
@@ -167,29 +179,23 @@ const questions = [
 {q:"When was the first time we kissed and hugged?", text:true},
 {q:"Our first long drive date", text:true},
 {q:"Our first date in Delhi and your feelings?", text:true},
-{q:"Do you remember our first cab ride, sunset, movie and music?", yesNo:true, text:true},
 {q:"My first gift to you", text:true},
-{q:"My best gift to you so far", text:true},
-{q:"Our favourite memory", text:true},
-{q:"Write our best Valentine memory ❤️", text:true}
+{q:"Our favourite memory", text:true}
 ];
 
 function checkPass(){
 if(document.getElementById("pass").value === "srkforever"){
 
-// Fade out effect
 document.body.style.filter="brightness(0)";
 
 setTimeout(()=>{
 document.body.classList.add("video-active");
 document.getElementById("bgVideo").play();
-document.body.style.filter="brightness(1)";
 document.getElementById("music").play();
+document.body.style.filter="brightness(1)";
 },800);
 
-setTimeout(()=>{
-next();
-},1600);
+setTimeout(()=>{ next(); },1500);
 
 }else{
 alert("Wrong password 😏");
@@ -221,8 +227,10 @@ return;
 let qObj = questions[step];
 
 let qEl = document.createElement("h1");
-qEl.style.color = "red";
+qEl.className = "sparkle";
+qEl.style.color = "pink";
 content.appendChild(qEl);
+
 typeWriter("Cheesecake, " + qObj.q, qEl);
 
 if(qObj.yesNo){
@@ -237,15 +245,14 @@ noBtn.onclick = handleNo;
 content.appendChild(noBtn);
 }
 else{
-showTextarea(qObj);
+showTextarea();
 }
 }
 
 function handleYes(qObj){
 if(qObj.text){
-showTextarea(qObj);
+showTextarea();
 }else{
-answers.push(qObj.q + " -> Yes");
 step++;
 next();
 }
@@ -254,15 +261,9 @@ next();
 function handleNo(){
 document.body.classList.add("shake");
 setTimeout(()=>document.body.classList.remove("shake"),400);
-
-document.getElementById("content").innerHTML = `
-<h1 style="font-size:90px;">💔</h1>
-<h2>No? I’ll ask again ❤️</h2>
-<button onclick="next()">Ask Again</button>
-`;
 }
 
-function showTextarea(qObj){
+function showTextarea(){
 const content = document.getElementById("content");
 
 let textarea = document.createElement("textarea");
@@ -274,12 +275,29 @@ nextBtn.innerHTML = "Next ❤️";
 nextBtn.disabled = true;
 content.appendChild(nextBtn);
 
-textarea.addEventListener("input", function(){
+/* 💖 Small hearts while typing */
+textarea.addEventListener("input", function(e){
 nextBtn.disabled = this.value.trim().length === 0;
+
+let heart = document.createElement("div");
+heart.className = "heart-pop";
+heart.innerHTML = "💖";
+heart.style.left = (e.pageX) + "px";
+heart.style.top = (e.pageY - 20) + "px";
+document.body.appendChild(heart);
+setTimeout(()=>heart.remove(),1000);
 });
 
 nextBtn.onclick = function(){
-answers.push(qObj.q + " -> " + textarea.value);
+for(let i=0;i<8;i++){
+let heart = document.createElement("div");
+heart.className = "heart-pop";
+heart.innerHTML = "❤️";
+heart.style.left = (window.innerWidth/2 + (Math.random()*100-50)) + "px";
+heart.style.top = (window.innerHeight/2) + "px";
+document.body.appendChild(heart);
+setTimeout(()=>heart.remove(),1000);
+}
 step++;
 next();
 };
@@ -287,7 +305,7 @@ next();
 
 function proposal(){
 document.getElementById("content").innerHTML = `
-<h1 style="color:red;">Will you be my Valentine forever?</h1>
+<h1 class="sparkle" style="color:red;">Will you be my Valentine forever?</h1>
 <button onclick="yesFinal()">Yes ❤️</button>
 <button onclick="noFinal()">No 💔</button>`;
 }
@@ -301,12 +319,10 @@ typeWriter(longMessage, document.getElementById("msg"), 20);
 
 function noFinal(){
 document.body.classList.add("shake");
-document.getElementById("content").innerHTML = `
-<h1 style="font-size:90px;">💔</h1>
-<button onclick="proposal()">Okay Fine... Yes ❤️</button>`;
+setTimeout(()=>document.body.classList.remove("shake"),400);
 }
 
-/* Falling Effects */
+/* Decorative falling */
 function createFall(icon){
 const el = document.createElement("div");
 el.className = "fall";
@@ -316,24 +332,7 @@ el.style.animationDuration = (Math.random()*5+5) + "s";
 document.body.appendChild(el);
 setTimeout(()=>el.remove(),10000);
 }
-
-setInterval(()=>createFall("❄️"),400);
-setInterval(()=>createFall("❤️"),700);
-setInterval(()=>createFall("🌹"),900);
-
-/* Smart Countdown */
-setInterval(()=>{
-const now = new Date();
-let year = now.getFullYear();
-let target = new Date("February 14, " + year);
-if(now > target){
-target = new Date("February 14, " + (year+1));
-}
-const diff = target - now;
-const days = Math.floor(diff/(1000*60*60*24));
-document.getElementById("countdown").innerHTML =
-"Countdown: " + days + " days ❤️";
-},1000);
+setInterval(()=>createFall("🌹"),800);
 
 </script>
 </body>
