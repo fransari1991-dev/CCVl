@@ -5,6 +5,8 @@
 <title>Valentine ❤️</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
 <style>
 body{
 margin:0;
@@ -14,35 +16,6 @@ color:white;
 font-family:Georgia,serif;
 overflow:hidden;
 text-align:center;
-transition:all 1.5s ease;
-}
-
-/* Background Video */
-#bgVideo{
-position:fixed;
-top:0;
-left:0;
-width:100%;
-height:100%;
-object-fit:cover;
-z-index:-2;
-opacity:0;
-transition:opacity 2s ease;
-}
-
-.video-active #bgVideo{
-opacity:1;
-}
-
-.overlay{
-position:fixed;
-top:0;
-left:0;
-width:100%;
-height:100%;
-background:rgba(0,0,0,0.4);
-z-index:-1;
-pointer-events:none;
 }
 
 .container{
@@ -52,17 +25,6 @@ justify-content:center;
 align-items:center;
 height:100vh;
 padding:30px;
-position:relative;
-z-index:3;
-}
-
-.sparkle{
-animation: softGlow 2s ease-in-out infinite alternate;
-}
-
-@keyframes softGlow{
-0%{ text-shadow:0 0 5px pink; }
-100%{ text-shadow:0 0 20px gold; }
 }
 
 button{
@@ -77,9 +39,8 @@ cursor:pointer;
 transition:0.3s;
 }
 
-button.yes-btn:hover{
-box-shadow:0 0 20px gold, 0 0 40px orange, 0 0 60px yellow;
-transform:scale(1.1);
+button:hover{
+transform:scale(1.05);
 }
 
 button:disabled{
@@ -97,54 +58,57 @@ margin-top:10px;
 font-size:16px;
 }
 
-img{
-width:260px;
+/* Progress bar */
+.progress-container{
+width:80%;
+max-width:600px;
+height:20px;
+background:#222;
 border-radius:20px;
-margin-top:20px;
+margin-bottom:20px;
+overflow:hidden;
 }
 
-.shimmer{
-animation:goldShimmer 2s infinite alternate;
-}
-
-@keyframes goldShimmer{
-0%{box-shadow:0 0 10px gold;}
-100%{box-shadow:0 0 40px gold;}
-}
-
-.shake{
-animation:shake 0.4s;
-}
-
-@keyframes shake{
-0%{transform:translateX(0);}
-25%{transform:translateX(-10px);}
-50%{transform:translateX(10px);}
-75%{transform:translateX(-10px);}
-100%{transform:translateX(0);}
-}
-
-#fireworks{
-position:fixed;
-top:0;
-left:0;
-width:100%;
+.progress-bar{
 height:100%;
+width:0%;
+background:linear-gradient(90deg,#ff007f,#ff66cc);
+box-shadow:0 0 20px #ff66cc;
+transition:width 0.5s ease;
+}
+
+/* Falling animation */
+.fall{
+position:fixed;
+top:-50px;
+font-size:22px;
 pointer-events:none;
-z-index:5;
+animation: fall linear forwards;
+}
+
+@keyframes fall{
+to{
+transform:translateY(110vh) rotate(360deg);
+}
+}
+
+/* Fireworks */
+.firework{
+position:fixed;
+width:6px;
+height:6px;
+border-radius:50%;
+animation:explode 1s ease-out forwards;
+}
+
+@keyframes explode{
+0%{transform:scale(1);}
+100%{transform:scale(15);opacity:0;}
 }
 </style>
 </head>
 
 <body>
-
-<canvas id="fireworks"></canvas>
-
-<video id="bgVideo" muted loop playsinline>
-<source src="clipfly-ai-20260212211929.mp4" type="video/mp4">
-</video>
-
-<div class="overlay"></div>
 
 <div class="container" id="content">
 <h1 style="color:gold;">Hey Cheesecake ❤️</h1>
@@ -152,15 +116,10 @@ z-index:5;
 <button onclick="checkPass()">Enter</button>
 </div>
 
-<audio id="music" loop>
-<source src="love.mp3" type="audio/mpeg">
-</audio>
-
 <script>
 
 let step = 0;
-const wifePhoto = "wife.jpg";
-const longMessage = `PASTE YOUR LONG MESSAGE HERE`;
+let answers = [];
 
 const questions = [
 {q:"Do you remember the first time I saw you and lost my heart?", yesNo:true},
@@ -169,168 +128,172 @@ const questions = [
 {q:"How did you feel after we kissed and hugged?", text:true},
 {q:"Do you remember our first long drive date?", text:true},
 {q:"How was our first date in Delhi and your feelings after we met?", text:true},
-{q:"How was your experience of our first cab ride, the movie, songs and the beautiful sunset?", text:true},
+{q:"How was your experience of our first cab ride, the movie, songs and sunset?", text:true},
 {q:"My first gift to you?", text:true},
 {q:"Our favourite memory?", text:true},
 {q:"Our best love moment, and anything else you want to share?", text:true}
 ];
 
 function checkPass(){
-const passwordInput = document.getElementById("pass").value.trim();
-if(passwordInput === "181915"){
-document.body.classList.add("video-active");
-document.getElementById("bgVideo").play().catch(()=>{});
-document.getElementById("music").play().catch(()=>{});
+if(document.getElementById("pass").value.trim()==="181915"){
+startFalling();
 next();
 }else{
 alert("Wrong password 😏");
 }
 }
 
-function next(){
-const content = document.getElementById("content");
-content.innerHTML = "";
+function startFalling(){
+const icons=["🌹","💖","❄️"];
+setInterval(()=>{
+let el=document.createElement("div");
+el.className="fall";
+el.innerHTML=icons[Math.floor(Math.random()*icons.length)];
+el.style.left=Math.random()*100+"vw";
+el.style.animationDuration=(Math.random()*5+5)+"s";
+document.body.appendChild(el);
+setTimeout(()=>el.remove(),10000);
+},300);
+}
 
-if(step >= questions.length){
-proposal();
+function next(){
+const content=document.getElementById("content");
+content.innerHTML="";
+
+if(step>=questions.length){
+showSummary();
 return;
 }
 
-let qObj = questions[step];
+let progressContainer=document.createElement("div");
+progressContainer.className="progress-container";
+let progressBar=document.createElement("div");
+progressBar.className="progress-bar";
+progressBar.style.width=((step)/questions.length)*100+"%";
+progressContainer.appendChild(progressBar);
+content.appendChild(progressContainer);
 
-let qEl = document.createElement("h1");
-qEl.className = "sparkle";
-qEl.style.color = "pink";
-qEl.innerHTML = "Cheesecake, " + qObj.q;
-content.appendChild(qEl);
+let qObj=questions[step];
+
+let q=document.createElement("h2");
+q.innerHTML=qObj.q;
+content.appendChild(q);
 
 if(qObj.yesNo){
-let yesBtn = document.createElement("button");
-yesBtn.innerHTML = "Yes ❤️";
-yesBtn.className = "yes-btn";
-yesBtn.onclick = ()=>handleYes(qObj);
-content.appendChild(yesBtn);
-
-let noBtn = document.createElement("button");
-noBtn.innerHTML = "No 💔";
-noBtn.onclick = handleNo;
-content.appendChild(noBtn);
-}else{
-showTextarea();
-}
-}
-
-function handleYes(qObj){
+let yesBtn=document.createElement("button");
+yesBtn.innerHTML="Yes ❤️";
+yesBtn.onclick=()=>{
+answers[step]="Yes";
 if(qObj.text){
 showTextarea();
 }else{
 step++;
 next();
 }
+};
+content.appendChild(yesBtn);
+
+let noBtn=document.createElement("button");
+noBtn.innerHTML="No 💔";
+noBtn.onclick=()=>{
+answers[step]="No";
+alert("Don't break my heart 💔");
+};
+content.appendChild(noBtn);
 }
-
-function handleNo(){
-document.body.classList.add("shake");
-setTimeout(()=>document.body.classList.remove("shake"),400);
-
-let msg=document.createElement("div");
-msg.innerHTML="Don't break my heart 💔";
-msg.style.color="red";
-msg.style.marginTop="15px";
-msg.style.fontSize="22px";
-document.getElementById("content").appendChild(msg);
-setTimeout(()=>msg.remove(),2000);
+else{
+showTextarea();
+}
 }
 
 function showTextarea(){
 const content=document.getElementById("content");
+
 let textarea=document.createElement("textarea");
 textarea.placeholder="Write your answer...";
 content.appendChild(textarea);
 
-let nextBtn=document.createElement("button");
-nextBtn.innerHTML="Next ❤️";
-nextBtn.disabled=true;
-content.appendChild(nextBtn);
+let saveBtn=document.createElement("button");
+saveBtn.innerHTML="Save ❤️";
+saveBtn.disabled=true;
+content.appendChild(saveBtn);
 
-textarea.addEventListener("input",function(){
-nextBtn.disabled=this.value.trim().length===0;
+textarea.addEventListener("input",()=>{
+saveBtn.disabled=textarea.value.trim()==="";
 });
 
-nextBtn.onclick=function(){
+saveBtn.onclick=function(){
+answers[step]=textarea.value;
 step++;
 next();
 };
 }
 
-function proposal(){
+function showSummary(){
+const content=document.getElementById("content");
+content.innerHTML="<h1 style='color:gold;'>Our Beautiful Memories ❤️</h1>";
+
+let text="";
+questions.forEach((q,i)=>{
+text+=q.q+"\n"+(answers[i]||"")+"\n\n";
+});
+
+let pre=document.createElement("pre");
+pre.style.whiteSpace="pre-wrap";
+pre.innerText=text;
+content.appendChild(pre);
+
+let pdfBtn=document.createElement("button");
+pdfBtn.innerHTML="Download Our Love Story as PDF ❤️";
+pdfBtn.onclick=downloadPDF;
+content.appendChild(pdfBtn);
+
+let finalBtn=document.createElement("button");
+finalBtn.innerHTML="Final Surprise ❤️";
+finalBtn.onclick=finalProposal;
+content.appendChild(finalBtn);
+}
+
+function downloadPDF(){
+const { jsPDF } = window.jspdf;
+const doc = new jsPDF();
+let text="";
+questions.forEach((q,i)=>{
+text+=q.q+"\n"+(answers[i]||"")+"\n\n";
+});
+doc.text(text,10,10);
+doc.save("Our_Love_Story.pdf");
+}
+
+function finalProposal(){
 document.getElementById("content").innerHTML=`
-<h1 class="sparkle" style="color:red;">Will you be my Valentine forever?</h1>
-<button class="yes-btn" onclick="yesFinal()">Yes ❤️</button>
-<button onclick="handleNo()">No 💔</button>`;
+<h1 style="color:red;">Will you be my Valentine forever? ❤️</h1>
+<button onclick="yesFinal()">Yes ❤️</button>
+<button onclick="noFinal()">No 💔</button>`;
 }
 
 function yesFinal(){
+document.getElementById("content").innerHTML="<h1 style='color:gold;'>You are my forever ❤️</h1>";
 startFireworks();
-document.getElementById("content").innerHTML=`
-<h1 id="msg"></h1>
-<img src="${wifePhoto}" class="shimmer">`;
-typeWriter(longMessage,document.getElementById("msg"),20);
 }
 
-function typeWriter(text,el,speed=30){
-let i=0;
-el.innerHTML="";
-function typing(){
-if(i<text.length){
-el.innerHTML+=text.charAt(i);
-i++;
-setTimeout(typing,speed);
+function noFinal(){
+alert("Don't break my heart 💔");
 }
-}
-typing();
-}
-
-/* Fireworks */
-const canvas=document.getElementById("fireworks");
-const ctx=canvas.getContext("2d");
-canvas.width=window.innerWidth;
-canvas.height=window.innerHeight;
-
-let particles=[];
 
 function startFireworks(){
 setInterval(()=>{
-for(let i=0;i<70;i++){
-particles.push({
-x:Math.random()*canvas.width,
-y:Math.random()*canvas.height/2,
-angle:Math.random()*2*Math.PI,
-speed:Math.random()*4+2,
-radius:Math.random()*2+1,
-life:100
-});
-}
-},600);
-animate();
-}
-
-function animate(){
-requestAnimationFrame(animate);
-ctx.clearRect(0,0,canvas.width,canvas.height);
-
-particles.forEach((p,index)=>{
-p.x+=Math.cos(p.angle)*p.speed;
-p.y+=Math.sin(p.angle)*p.speed;
-p.life--;
-ctx.beginPath();
-ctx.arc(p.x,p.y,p.radius,0,Math.PI*2);
-ctx.fillStyle="hsl("+Math.random()*360+",100%,60%)";
-ctx.fill();
-if(p.life<=0)particles.splice(index,1);
-});
+let fw=document.createElement("div");
+fw.className="firework";
+fw.style.left=Math.random()*100+"vw";
+fw.style.top=Math.random()*100+"vh";
+fw.style.background=`hsl(${Math.random()*360},100%,60%)`;
+document.body.appendChild(fw);
+setTimeout(()=>fw.remove(),1000);
+},300);
 }
 
 </script>
+
 </body>
 </html>
