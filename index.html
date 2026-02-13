@@ -188,23 +188,42 @@ const questions = [
 ];
 
 function checkPass(){
-if(document.getElementById("pass").value === "srkforever"){
+const passwordInput = document.getElementById("pass").value.trim();
 
-document.body.style.filter="brightness(0)";
+if(passwordInput === "srkforever"){
 
-setTimeout(()=>{
-document.body.classList.add("video-active");
-document.getElementById("bgVideo").play();
-document.getElementById("music").play();
-document.body.style.filter="brightness(1)";
-},800);
+    // Fade to black first
+    document.body.style.transition = "all 1s ease";
+    document.body.style.opacity = "0";
 
-setTimeout(()=>{ next(); },1500);
+    setTimeout(() => {
+
+        document.body.classList.add("video-active");
+
+        const video = document.getElementById("bgVideo");
+        const music = document.getElementById("music");
+
+        // Try playing video safely
+        video.play().catch(error => {
+            console.log("Video autoplay blocked:", error);
+        });
+
+        // Try playing music safely
+        music.play().catch(error => {
+            console.log("Audio autoplay blocked:", error);
+        });
+
+        document.body.style.opacity = "1";
+
+        next();
+
+    }, 1000);
 
 }else{
-alert("Wrong password 😏");
+    alert("Wrong password 😏");
 }
 }
+
 
 function typeWriter(text, el, speed = 30){
 let i = 0;
