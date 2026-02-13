@@ -56,7 +56,6 @@ position:relative;
 z-index:3;
 }
 
-/* ✨ Soft Sparkle for Questions */
 .sparkle{
 animation: softGlow 2s ease-in-out infinite alternate;
 }
@@ -108,7 +107,6 @@ animation:goldShimmer 2s infinite alternate;
 100%{box-shadow:0 0 40px gold;}
 }
 
-/* Floating decoration */
 .fall{
 position:absolute;
 top:-50px;
@@ -121,7 +119,6 @@ pointer-events:none;
 to{transform:translateY(110vh);}
 }
 
-/* 💖 Heart Pop */
 .heart-pop{
 position:absolute;
 font-size:20px;
@@ -150,7 +147,6 @@ animation:shake 0.4s;
 
 <body>
 
-<!-- Background Video -->
 <video id="bgVideo" muted loop playsinline>
 <source src="clipfly-ai-20260212211929.mp4" type="video/mp4">
 </video>
@@ -178,13 +174,12 @@ const questions = [
 {q:"Do you remember the date, I saw you the first time?", yesNo:true, text:true},
 {q:"When was the first time, we kissed and hugged?", text:true},
 {q:"How did you feel, after we kissed and hugged?", text:true},
-{q:"Do you remember, our first long drive date", text:true},
-{q:"How was our first date in Delhi and your feelings after we made love?", text:true},
+{q:"Do you remember, our first long drive date?", text:true},
+{q:"How was our first date in Delhi and your feelings after we met?", text:true},
 {q:"How was your experience of our first cab ride, the movie, songs and the beautiful sunset?", text:true},
-{q:"My first gift to you", text:true},
-{q:"Our favourite memory", text:true}
-{q:"Our best love moment, and anything else you want to share", text:true}
-{q:"", text:true}
+{q:"My first gift to you?", text:true},
+{q:"Our favourite memory?", text:true},
+{q:"Our best love moment, and anything else you want to share?", text:true}
 ];
 
 function checkPass(){
@@ -192,38 +187,28 @@ const passwordInput = document.getElementById("pass").value.trim();
 
 if(passwordInput === "srkforever"){
 
-    // Fade to black first
-    document.body.style.transition = "all 1s ease";
-    document.body.style.opacity = "0";
+document.body.style.opacity = "0";
 
-    setTimeout(() => {
+setTimeout(() => {
 
-        document.body.classList.add("video-active");
+document.body.classList.add("video-active");
 
-        const video = document.getElementById("bgVideo");
-        const music = document.getElementById("music");
+const video = document.getElementById("bgVideo");
+const music = document.getElementById("music");
 
-        // Try playing video safely
-        video.play().catch(error => {
-            console.log("Video autoplay blocked:", error);
-        });
+video.play().catch(()=>{});
+music.play().catch(()=>{});
 
-        // Try playing music safely
-        music.play().catch(error => {
-            console.log("Audio autoplay blocked:", error);
-        });
+document.body.style.opacity = "1";
 
-        document.body.style.opacity = "1";
+next();
 
-        next();
-
-    }, 1000);
+}, 1000);
 
 }else{
-    alert("Wrong password 😏");
+alert("Wrong password 😏");
 }
 }
-
 
 function typeWriter(text, el, speed = 30){
 let i = 0;
@@ -298,15 +283,14 @@ nextBtn.innerHTML = "Next ❤️";
 nextBtn.disabled = true;
 content.appendChild(nextBtn);
 
-/* 💖 Small hearts while typing */
 textarea.addEventListener("input", function(e){
 nextBtn.disabled = this.value.trim().length === 0;
 
 let heart = document.createElement("div");
 heart.className = "heart-pop";
 heart.innerHTML = "💖";
-heart.style.left = (e.pageX) + "px";
-heart.style.top = (e.pageY - 20) + "px";
+heart.style.left = (window.innerWidth/2) + "px";
+heart.style.top = (window.innerHeight/2) + "px";
 document.body.appendChild(heart);
 setTimeout(()=>heart.remove(),1000);
 });
@@ -345,7 +329,6 @@ document.body.classList.add("shake");
 setTimeout(()=>document.body.classList.remove("shake"),400);
 }
 
-/* Decorative falling */
 function createFall(icon){
 const el = document.createElement("div");
 el.className = "fall";
@@ -355,6 +338,7 @@ el.style.animationDuration = (Math.random()*5+5) + "s";
 document.body.appendChild(el);
 setTimeout(()=>el.remove(),10000);
 }
+
 setInterval(()=>createFall("🌹"),800);
 
 </script>
