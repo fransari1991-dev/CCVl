@@ -8,11 +8,16 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
 <style>
+
+/* FORCE EVERYTHING RED */
+*{
+color:red !important;
+}
+
 body{
 margin:0;
 padding:0;
 background:black;
-color:red;
 font-family:Georgia,serif;
 overflow:hidden;
 text-align:center;
@@ -35,9 +40,8 @@ padding:10px 20px;
 margin:10px;
 font-size:18px;
 border-radius:30px;
-border:none;
-background:darkred;
-color:white;
+border:1px solid red;
+background:black;
 cursor:pointer;
 transition:0.3s;
 }
@@ -57,7 +61,6 @@ border-radius:15px;
 padding:10px;
 margin-top:10px;
 font-size:16px;
-color:red;
 background:#111;
 border:1px solid red;
 }
@@ -67,7 +70,6 @@ padding:10px;
 border-radius:20px;
 border:1px solid red;
 background:#111;
-color:red;
 margin-top:10px;
 }
 
@@ -92,7 +94,7 @@ overflow:hidden;
 .progress-bar{
 height:100%;
 width:0%;
-background:linear-gradient(90deg,red,darkred);
+background:red;
 box-shadow:0 0 20px red;
 transition:width 0.5s ease;
 }
@@ -130,19 +132,6 @@ from{opacity:0;}
 to{opacity:1;}
 }
 
-/* Final Message */
-.loveMessage{
-font-size:17px;
-line-height:1.9;
-max-width:900px;
-margin:30px auto;
-white-space:pre-wrap;
-color:#ff4d4d;
-text-align:justify;
-overflow-y:auto;
-max-height:50vh;
-}
-
 /* Background Video */
 #bgVideo{
 position:fixed;
@@ -153,6 +142,17 @@ height:100%;
 object-fit:cover;
 z-index:0;
 display:none;
+}
+
+.loveMessage{
+font-size:17px;
+line-height:1.9;
+max-width:900px;
+margin:30px auto;
+white-space:pre-wrap;
+text-align:justify;
+overflow-y:auto;
+max-height:50vh;
 }
 </style>
 </head>
@@ -353,7 +353,7 @@ let fw=document.createElement("div");
 fw.className="firework";
 fw.style.left=Math.random()*100+"vw";
 fw.style.top=Math.random()*100+"vh";
-fw.style.background="hsl("+(Math.random()*360)+",100%,60%)";
+fw.style.background="red";
 document.body.appendChild(fw);
 setTimeout(()=>fw.remove(),1000);
 },300);
