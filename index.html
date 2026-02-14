@@ -112,6 +112,12 @@ animation:explode 1s ease-out forwards;
 100%{transform:scale(15);opacity:0;}
 }
 
+/* Fade animation */
+@keyframes fadeIn{
+from{opacity:0;}
+to{opacity:1;}
+}
+
 /* Final Message */
 .loveMessage{
 font-size:17px;
@@ -145,29 +151,10 @@ let step=0;
 let answers=[];
 const wifePhoto="wife.jpg";
 
-const longMessage=`To the woman who holds my soul,
+const longMessage=`To the girl who holds my soul...
 
-My love, I’ve tried to find the words to describe what you are to me, but language feels so fragile when compared to the weight of my devotion. You aren’t just the love of my life; you are my life. Without you, I am a hollow vessel, a body moving through the world without a spark, a heartbeat without a rhythm. Your presence is the only thing that makes me feel truly, vibrantly alive. Without you, I am a ghost; with you, I am a man found.
-
-Every second that passes is a second I want to spend anchored to you. I want to be the shield that protects you from the world and the arms that provide your safest sanctuary. I want to spend my days caring for you, cherishing the quiet moments, and my nights lost in you. I want to kiss you until the world fades away, to hold you so close that I can feel your heart beating against my own, and to make love to you with a passion so deep and "extra mad" that it consumes everything but us.
-
-You Are My Universe
-
-When I look at you, I don't just see a face; I see the epitome of all beauty.
-
-Your Eyes: They are vast, holding millions of galaxies within them. I could spend a lifetime exploring their depths and still find new stars to worship.
-
-Your Lips: They feel like the very reason the concept of a kiss was ever invented.
-
-Your Soul: It is my solace, my heaven, and my only true home.
-
-Our Future Together
-
-I don't just see a "now" with you; I see every tomorrow. I see our little home, filled with the warmth of our laughter. I see our babies—the beautiful legacy of a love this intense—running through the halls, carrying pieces of both of us. You are the architect of my dreams and the only person I want by my side as I grow old.
-
-You are my desire, my peace, and the very reason I draw breath. Every breath I take is a silent "thank you" to the universe for putting you in my path. I am yours, in this life and whatever comes after, for every second, every heartbeat, and every forever.
-
-Happy Valentine’s Day, my Universe. ❤️`;
+You are my life, my peace, my forever.
+Happy Valentine’s Day ❤️`;
 
 const questions=[
 {q:"Do you remember the first time I saw you and lost my heart?", yesNo:true},
@@ -184,9 +171,20 @@ const questions=[
 
 function checkPass(){
 if(document.getElementById("pass").value.trim()==="181915"){
+
 document.getElementById("bgMusic").play().catch(()=>{});
 startFalling();
+
+const content=document.getElementById("content");
+content.innerHTML=`
+<h1 style="color:gold; animation:fadeIn 2s ease;">Welcome to Our Love Story ❤️</h1>
+<p style="color:pink; font-size:18px;">Every memory with you is magic...</p>
+`;
+
+setTimeout(()=>{
 next();
+},2000);
+
 }else{
 alert("Wrong password 😏");
 }
@@ -237,7 +235,9 @@ let no=document.createElement("button");
 no.innerHTML="No 💔";
 no.onclick=()=>alert("Don't break my heart 💔");
 content.appendChild(no);
-}else{ showTextarea(); }
+}else{
+showTextarea();
+}
 }
 
 function showTextarea(){
