@@ -12,7 +12,7 @@ body{
 margin:0;
 padding:0;
 background:black;
-color:white;
+color:red;
 font-family:Georgia,serif;
 overflow:hidden;
 text-align:center;
@@ -36,7 +36,7 @@ margin:10px;
 font-size:18px;
 border-radius:30px;
 border:none;
-background:crimson;
+background:darkred;
 color:white;
 cursor:pointer;
 transition:0.3s;
@@ -57,13 +57,25 @@ border-radius:15px;
 padding:10px;
 margin-top:10px;
 font-size:16px;
+color:red;
+background:#111;
+border:1px solid red;
+}
+
+input{
+padding:10px;
+border-radius:20px;
+border:1px solid red;
+background:#111;
+color:red;
+margin-top:10px;
 }
 
 img{
 width:260px;
 border-radius:20px;
 margin-top:20px;
-box-shadow:0 0 30px pink;
+box-shadow:0 0 30px red;
 }
 
 /* Progress bar */
@@ -80,8 +92,8 @@ overflow:hidden;
 .progress-bar{
 height:100%;
 width:0%;
-background:linear-gradient(90deg,#ff007f,#ff66cc);
-box-shadow:0 0 20px #ff66cc;
+background:linear-gradient(90deg,red,darkred);
+box-shadow:0 0 20px red;
 transition:width 0.5s ease;
 }
 
@@ -125,7 +137,7 @@ line-height:1.9;
 max-width:900px;
 margin:30px auto;
 white-space:pre-wrap;
-color:#ffd6f2;
+color:#ff4d4d;
 text-align:justify;
 overflow-y:auto;
 max-height:50vh;
@@ -151,13 +163,12 @@ display:none;
 <source src="love.mp3" type="audio/mpeg">
 </audio>
 
-<!-- Background Video -->
 <video id="bgVideo" autoplay muted loop>
 <source src="clipfly-ai-20260212211929.mp4" type="video/mp4">
 </video>
 
 <div class="container" id="content">
-<h1 style="color:gold;">Hey Cheesecake ❤️</h1>
+<h1>Hey Cheesecake ❤️</h1>
 <input type="password" id="pass" placeholder="Enter our secret password">
 <button onclick="checkPass()">Enter</button>
 </div>
@@ -197,8 +208,8 @@ startFalling();
 
 const content=document.getElementById("content");
 content.innerHTML=`
-<h1 style="color:gold; animation:fadeIn 2s ease;">Welcome to Our Love Story ❤️</h1>
-<p style="color:pink; font-size:18px;">Every memory with you is magic...</p>
+<h1 style="animation:fadeIn 2s ease;">Welcome to Our Love Story ❤️</h1>
+<p style="font-size:18px;">Every memory with you is magic...</p>
 `;
 
 setTimeout(()=>{
@@ -319,14 +330,14 @@ doc.save("Our_Love_Story.pdf");
 
 function finalProposal(){
 document.getElementById("content").innerHTML=`
-<h1 style="color:red;">Will you be my Valentine forever? ❤️</h1>
+<h1>Will you be my Valentine forever? ❤️</h1>
 <button onclick="yesFinal()">Yes ❤️</button>
 <button onclick="noFinal()">No 💔</button>`;
 }
 
 function yesFinal(){
 document.getElementById("content").innerHTML=`
-<h1 style="color:gold;">You are my forever ❤️</h1>
+<h1>You are my forever ❤️</h1>
 <img src="${wifePhoto}">
 <div class="loveMessage">${longMessage}</div>`;
 startFireworks();
